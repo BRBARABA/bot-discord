@@ -15,6 +15,9 @@ client.on('message', msg => {
   if (msg.content === 'hello') {
     msg.channel.sendMessage('Hello to you too, fellow !')
   }
+   if (msg.content === 'spotify') {
+    msg.channel.sendMessage('You search a music, fellow !')
+  }
 })
 
 client.login(config.token)
