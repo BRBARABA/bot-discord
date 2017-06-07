@@ -19,14 +19,18 @@ client.on('message', msg => {
   // If message is hello, post hello too
   if (msg.content.toLowerCase() === 'hello') {
     msg.channel.send('hello')
-  } else if (msg.content.substr(0, 9).toLowerCase() === '!youtube ') {
-    youtube.search({content: msg.content.substr(9)}, data, answer)
-  } else if (msg.content.substr(0, 16).toLowerCase() === '!channelyoutube ') {
-    youtube.search({content: msg.content.substr(16), type: 'channel'}, data, answer)
-  } else if (msg.content.substr(0, 14).toLowerCase() === '!videoyoutube ') {
-    youtube.search({content: msg.content.substr(14), type: 'video'}, data, answer)
-  } else if (msg.content.substr(0, 17).toLowerCase() === '!playlistyoutube ') {
-    youtube.search({content: msg.content.substr(17), type: 'playlist'}, data, answer)
+  } else if (msg.content.startsWith('!youtube ')) {
+    var possibilities = ['channel', 'video', 'playlist']
+    data.content = msg.content.split('!youtube ')[1]
+
+    for (var i = 0; i < possibilities.length; i++) {
+      if (data.content.startsWith('!' + possibilities[i] + ' ')) {
+        data.content = data.content.split('!' + possibilities[i] + ' ')[1]
+        data.type = possibilities[i]
+        break
+      }
+    }
+    youtube.search(data, answer)
   }
 })
 
