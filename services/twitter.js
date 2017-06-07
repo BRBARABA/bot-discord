@@ -25,7 +25,7 @@ module.exports = {
   },
 
   recup_tweet: function (callback) {
-    client.stream('statuses/filter', {track: 'MusgaFR'}, function (stream) {
+    client.stream('statuses/filter', {track: config.twitter_tracked}, function (stream) {
       stream.on('data', function (tweet) {
         if (callback) {
           var message = 'Nouveau message :\nhttp://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str

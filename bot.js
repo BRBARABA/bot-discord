@@ -38,7 +38,7 @@ client.on('message', msg => {
     if (data.content.length <= 140 && msg.content.substring(7).length > 0) {
       twitter.post_tweet(data, answer)
     } else {
-      msg.channel.sendMessage('Votre message contient plus de 140 caractères !')
+      answer('Votre message contient plus de 140 caractères !', msg.channel)
     }
   }
 })
