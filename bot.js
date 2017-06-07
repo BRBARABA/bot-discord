@@ -12,7 +12,7 @@ client.on('ready', () => {
 client.on('message', msg => {
   // Check if the message has been posted in a channel where the bot operates
   // and that the author is not the bot itself
-  if ((msg.channel.type !== 'dm' && config.channel !== msg.channel.id) || msg.author.id === client.user.id) return
+  if ((msg.channel.type !== 'dm' && config.discord_channel !== msg.channel.id) || msg.author.id === client.user.id) return
 
   var data = {}
   data.author = msg.author
@@ -33,13 +33,12 @@ client.on('message', msg => {
       }
     }
     youtube.search(data, answer)
-  }
-
-  if (msg.content.substring(0, 7) === '!tweet ') {
-    if (msg.content.substring(7).length <= 140 && msg.content.substring(7).length > 0) {
-      twitter.post_tweet({text: msg.content.substring(7), channel: msg.channel}, answer)
+  } else if (msg.content.startsWith('!tweet ')) {
+    data.content = msg.content.substring(7)
+    if (data.content.length <= 140 && msg.content.substring(7).length > 0) {
+      twitter.post_tweet(data, answer)
     } else {
-      return msg.channel.sendMessage('Votre message contient plus de 140 caractères !')
+      msg.channel.sendMessage('Votre message contient plus de 140 caractères !')
     }
   }
 })
@@ -49,13 +48,13 @@ function answer (content, channel) {
 }
 
 function send (content) {
-  var channelID = config.channel
+  var channelID = config.discord_channel
   for (var channel of client.channels) {
     if (channel[0] === channelID) {
-      channel[1].send(content)
+      answer(content, channel[1])
       return
     }
   }
 }
 
-client.login(config.token)
+client.login(config.discord_token)

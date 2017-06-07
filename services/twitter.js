@@ -10,12 +10,10 @@ var client = new Twitter({
 
 module.exports = {
   post_tweet: function (data, callback) {
-    var params = {status: data.text}
+    var params = {status: data.content}
     client.post('statuses/update', params, function (error, tweets, response) {
-      console.log(tweets)
       var message = ''
       if (!error) {
-        console.log(tweets)
         message = 'J\'ai tweeté !'
       } else {
         message = 'Je n\'ai pas réussi à tweeter'
@@ -30,7 +28,7 @@ module.exports = {
     client.stream('statuses/filter', {track: 'MusgaFR'}, function (stream) {
       stream.on('data', function (tweet) {
         if (callback) {
-          var message = 'http://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str
+          var message = 'Nouveau message :\nhttp://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str
           callback(message)
         }
       })
