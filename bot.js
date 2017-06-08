@@ -32,19 +32,20 @@ client.on('message', msg => {
       msg.channel.send('Begin of the search...')
       spotify.searchTracks(retour)
       .then(function (data) {
-        let numberOfAnswer=0;
-        while (numberOfAnswer<3) {
-          msg.channel.send("************************")
-          msg.channel.send("The answer "+(numberOfAnswer+1)+" is:")
-          msg.channel.send("The Artist: " + data.body.tracks.items[numberOfAnswer].artists[0].name + "; The Track: " + data.body.tracks.items[numberOfAnswer].name+ "; The Album: " + data.body.tracks.items[numberOfAnswer].album.name)
-          numberOfAnswer++
-				}
-			}, function (err) {
+        let i = 0
+        while (i < 3) {
+          let numberOfAnswer = i + 1
+          msg.channel.send('************************')
+          msg.channel.send('The answer ' + numberOfAnswer + ' is:')
+          msg.channel.send('The Artist: ' + data.body.tracks.items[numberOfAnswer].artists[0].name + '; The Track: ' + data.body.tracks.items[numberOfAnswer].name + '; The Album: ' + data.body.tracks.items[numberOfAnswer].album.name)
+          i++
+        }
+      }, function (err) {
         console.error(err)
-			})
-		}
+      })
+    }
 
-		// If message begins by !spotifyArtists, post the artist's names
+    // If message begins by !spotifyArtists, post the artist's names
     if (msg.content.startsWith('!spotifyArtists')) {
       let msgContent = msg.content.trim()
       let msgSplit = msgContent.split(' ')
@@ -53,19 +54,19 @@ client.on('message', msg => {
       msg.channel.send('Begin of the search of artist...')
       spotify.searchTracks(retour)
       .then(function (data) {
-        let numberOfAnswer=0;
-        while (numberOfAnswer<3){
-          msg.channel.send("************************")
-          msg.channel.send("The answer "+(numberOfAnswer+1)+" is:")
-          msg.channel.send("The Artist: " + data.body.tracks.items[numberOfAnswer].artists[0].name)
+        let numberOfAnswer = 0
+        while (numberOfAnswer < 3) {
+          msg.channel.send('************************')
+          msg.channel.send('The answer ' + numberOfAnswer + ' is:')
+          msg.channel.send('The Artist: ' + data.body.tracks.items[numberOfAnswer].artists[0].name)
           numberOfAnswer++
-				}
-			}, function (err) {
+        }
+      }, function (err) {
         console.error(err)
-			})
-		}
+      })
+    }
 
-		// If message begins by !spotifyAlbums, post the album's names
+    // If message begins by !spotifyAlbums, post the album's names
     if (msg.content.startsWith('!spotifyAlbums')) {
       let msgContent = msg.content.trim()
       let msgSplit = msgContent.split(' ')
@@ -74,18 +75,20 @@ client.on('message', msg => {
       msg.channel.send('Begin of the search of albums...')
       spotify.searchTracks(retour)
       .then(function (data) {
-        let numberOfAnswer=0;
-        while (numberOfAnswer<3){
-          msg.channel.send("************************")
-          msg.channel.send("The answer "+(numberOfAnswer+1)+" is:")
-          msg.channel.send("The Album: " + data.body.tracks.items[numberOfAnswer].album.name)
-          numberOfAnswer++
-				}
-			}, function (err) {
+        let i = 0
+        while (i < 3) {
+          let numberOfAnswer = i + 1
+          msg.channel.send('************************')
+          msg.channel.send('The answer ' + numberOfAnswer + ' is:')
+          msg.channel.send('The Album: ' + data.body.tracks.items[i].album.name)
+          i++
+        }
+      }, function (err) {
         console.error(err)
-			})
-		}
-		// If message begins by !spotifyTracks, post the track's names
+      })
+    }
+
+    // If message begins by !spotifyTracks, post the track's names
     if (msg.content.startsWith('!spotifyTracks')) {
       let msgContent = msg.content.trim()
       let msgSplit = msgContent.split(' ')
@@ -94,18 +97,19 @@ client.on('message', msg => {
       msg.channel.send('Begin of the search of tracks...')
       spotify.searchTracks(retour)
       .then(function (data) {
-        let numberOfAnswer=0;
-        while (numberOfAnswer<3){
-          msg.channel.send("************************")
-          msg.channel.send("The answer "+(numberOfAnswer+1)+" is:")
-          msg.channel.send("The Track: " + data.body.tracks.items[numberOfAnswer].name)
-          numberOfAnswer++
-				}
-			}, function (err) {
+        let i = 0
+        while (i < 3) {
+          let numberOfAnswer = i + 1
+          msg.channel.send('************************')
+          msg.channel.send('The answer ' + numberOfAnswer + ' is:')
+          msg.channel.send('The Track: ' + data.body.tracks.items[i].name)
+          i++
+        }
+      }, function (err) {
         console.error(err)
-			})
-		}
-	})
+      })
+    }
+  })
 })
 
 client.login(config.token)
