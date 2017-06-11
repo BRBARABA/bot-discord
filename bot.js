@@ -5,6 +5,7 @@ const twitter = require('./services/twitter.js')
 const youtube = require('./services/youtube.js')(config.youtube_apikey)
 const owm = require('./services/openweathermap.js')(config.owm_apikey)
 const translate = require('./services/translate.js')(config.gtranslate_apikey)
+const spotify = require('./services/spotify.js')
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`)
@@ -33,8 +34,9 @@ client.on('message', msg => {
       // OTHER
       'hello': 'Feel alone ? Answers you another hello',
       // SPOTIFY
+      '!spotify [search]': 'Grab something to hear for you',
       // TRANSLATE
-      '!translate [en, fr, ru...] [message]': 'Traslate your message into the selected langage',
+      '!translate [en, fr, ru...] [message]': 'Translate your message into the selected langage',
       // TWITTER
       '!tweet [message]': 'Tweet the message written',
       // YOUTUBE
@@ -81,6 +83,9 @@ client.on('message', msg => {
     data.lang = toTranslate.split(' ')[0]
     data.content = toTranslate.substring(data.lang.length + 1)
     translate.translate(data, answer)
+  } else if (msg.content.toLowerCase().startsWith('!spotify ')) {
+    data.content = msg.content.substring(9)
+    spotify.searchTracks(data, answer)
   }
 })
 
