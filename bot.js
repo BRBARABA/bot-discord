@@ -34,6 +34,7 @@ client.on('message', msg => {
       'hello': 'Feel alone ? Answers you another hello',
       // SPOTIFY
       // TRANSLATE
+      '!translate [en, fr, ru...] [message]': 'Traslate your message into the selected langage',
       // TWITTER
       '!tweet [message]': 'Tweet the message written',
       // YOUTUBE
