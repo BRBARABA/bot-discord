@@ -36,7 +36,7 @@ test('Translate', t => {
     if (typeof translation === 'undefined') {
       t.fail()
     } else {
-      t.pass()
+      t.is(translation.detectedSourceLanguage, 'fr')
     }
   })
 })
