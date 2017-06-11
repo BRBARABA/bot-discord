@@ -15,9 +15,10 @@ client.on('message', msg => {
   // If message is hello, post hello too
   if (msg.content === 'hello') {
     msg.channel.send('Hello fellow !')
-  }
-  if (msg.content.toLowerCase().startsWith('!weather ')) {
+  } else if (msg.content.toLowerCase().startsWith('!weather ')) {
     owm.getWeather(msg.content.split(9), send)
+  } else if (msg.content.toLowerCase().startsWith('!forecast ')) {
+    owm.getForecast(msg.content.split(10), send)
   }
 })
 
