@@ -17,5 +17,9 @@ module.exports = {
   owm_apikey: '28ab43c9ad4db9b92783421704a0e249',
 
   // GTRANSLATE
-  gtranslate_apikey: 'AIzaSyDigkouz1Xs0GvSmTDERMrMsX5kiVxtRmY'
+  gtranslate_apikey: 'AIzaSyDigkouz1Xs0GvSmTDERMrMsX5kiVxtRmY',
+
+  // SPOTIFY
+  spotify_clientId: 'f5633eb317cf4723b85ae67903cea6b8',
+  spotify_clientSecret: 'a840ee93598c492880d92942f00e6404'
 }
