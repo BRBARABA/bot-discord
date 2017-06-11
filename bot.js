@@ -1,81 +1,94 @@
 const Discord = require('discord.js')
 const config = require('./config.js')
 const client = new Discord.Client()
-
+const twitter = require('./services/twitter.js')
+const youtube = require('./services/youtube.js')(config.youtube_apikey)
+const owm = require('./services/openweathermap.js')(config.owm_apikey)
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`)
+  twitter.recup_tweet(send)
 })
-
-var clientOWM = require('node-rest-client-promise').Client()
 
 client.on('message', msg => {
   // Check if the message has been posted in a channel where the bot operates
   // and that the author is not the bot itself
-  if (msg.channel.type !== 'dm' && (config.channel !== msg.channel.id || msg.author.id === client.user.id)) return
+  if ((msg.channel.type !== 'dm' && config.discord_channel !== msg.channel.id) || msg.author.id === client.user.id) return
+
+  var data = {}
+  data.author = msg.author
+  data.channel = msg.channel
 
   // If message is hello, post hello too
   if (msg.content === 'hello') {
-    console.log(' VOILA !')
-    msg.channel.send('VOILA')
-  }
+    msg.channel.send('Hello fellow !')
+  } else if (msg.content === '!help') {
+    var commands = {
+      // COMMANDS
+      ' ->': 'COMMANDS <- <- ',
+      // OPENWEATHERMAP
+      '!weather [city]': 'Get the current meteo for city',
+      '!forecast [city]': 'Get the next 5 days\' meteo for city',
+      // OTHER
+      'hello': 'Feel alone ? Answers you another hello',
+      // SPOTIFY
+      // TRANSLATE
+      // TWITTER
+      '!tweet [message]': 'Tweet the message written',
+      // YOUTUBE
+      '!youtube [name]': 'Retrieves channels, playlists and videos matching name',
+      '!youtube !channel [name]': 'Retrieves channels matching name',
+      '!youtube !playlist [name]': 'Retrieves playlists matching name',
+      '!youtube !video [name]': 'Retrieves videos matching name',
+      // AUTOMATICS
+      '->': 'AUTOMATICS <- <-',
+      'Twitter': 'Retrieves every tweet mentioning ' + config.twitter_tracked
+    }
+    var usage = 'USAGE :'
+    for (var command in commands) {
+      usage += '\n' + command + ' -> ' + commands[command]
+    }
+    answer(usage, data.channel)
+  } else if (msg.content.startsWith('!youtube ')) {
+    var possibilities = ['channel', 'video', 'playlist']
+    data.content = msg.content.split('!youtube ')[1]
 
-  var msgTab = msg.content.split(' ')
-  console.log("msgTab=" + msgTab)
-  if (msgTab[0] === '!weather') { // Si la commande weather est appelée
-    var messageOWM = '' // On initialise la variable paramètre
-    for (var j = 1; j < msgTab.length; j++) { // Boucle pour chaque paramètre (ville, pays...)
-      messageOWM = messageOWM + ' ' + msgTab[j] // La variable regroupe l'ensemble des paramètres
+    for (var i = 0; i < possibilities.length; i++) {
+      if (data.content.startsWith('!' + possibilities[i] + ' ')) {
+        data.content = data.content.split('!' + possibilities[i] + ' ')[1]
+        data.type = possibilities[i]
+        break
+      }
     }
-    var newMessageOWM = messageOWM.split(', ') // Découpe de la variable
-    var city = newMessageOWM[0] // La ville est la première variable
-    var country = newMessageOWM[1] // Le pays est la seconde variable
-    console.log(messageOWM) 
-    console.log(city)
-    console.log(country)
-    clientOWM.getPromise('http://api.openweathermap.org/data/2.5/weather?q='+country+','+city+'&units=metric&lang=fr&APPID=28ab43c9ad4db9b92783421704a0e249') // Requête à l'API
-      .catch((error) => { // CAS D'ERREUR
-        throw error
-      })
-      .then((res) => { // CODE POUR LE RETOUR
-        var weather = 'La température est de ' + res.data.main.temp + '°C' 
-        weather = weather + ', l\'humidité est de ' + res.data.main.humidity + ' %'
-        weather = weather + ', le temps est : ' + res.data.weather[0].description
-        msg.channel.sendMessage(weather)
-        console.log(res.data)
-      })
-  }
-  if (msgTab[0] === '!forecast') { // Si la commande forecast est appelée
-    var messageOWM = '' // On initialise la variable paramètre
-    for (var j = 1; j < msgTab.length; j++) { // Boucle pour chaque paramètre (ville, pays...)
-      messageOWM = messageOWM + ' ' + msgTab[j] // La variable regroupe l'ensemble des paramètres
+    youtube.search(data, answer)
+  } else if (msg.content.startsWith('!tweet ')) {
+    data.content = msg.content.substring(7)
+    if (data.content.length <= 140 && msg.content.substring(7).length > 0) {
+      twitter.post_tweet(data, answer)
+    } else {
+      answer('Votre message contient plus de 140 caractères !', msg.channel)
     }
-    var newMessageOWM = messageOWM.split(', ') // Découpe de la variable
-    var city = newMessageOWM[0] // La ville est la première variable
-    var country = newMessageOWM[1] // Le pays est la seconde variable
-    console.log(messageOWM)
-    console.log(city)
-    console.log(country)
-    clientOWM.getPromise('http://api.openweathermap.org/data/2.5/forecast?q='+country+','+city+'&units=metric&lang=fr&APPID=28ab43c9ad4db9b92783421704a0e249') // Requête à l'API
-      .catch((error) => { // CAS D'ERREUR
-        throw error
-      })
-      .then((res) => { // CODE POUR LE RETOUR
-        var x = res.data.cnt
-        var ecart = x/5
-        var k = 1
-        for (var j = 1; j <= x; j=j+ecart) { // Boucle pour chaque jour de prévision
-          var weather = 'Jour '+k+' : '
-          weather = weather + 'La température sera de ' + res.data.list[j].main.temp + '°C'
-          weather = weather + ', l\'humidité sera de ' + res.data.list[j].main.humidity + ' %'
-          weather = weather + ', le temps sera : ' + res.data.list[j].weather[0].description
-          msg.channel.sendMessage(weather)
-          k=k+1
-          console.log(res.data)
-        }
-      })
+  } else if (msg.content.toLowerCase().startsWith('!weather ')) {
+    data.content = msg.content.substring(9)
+    owm.getWeather(data, answer)
+  } else if (msg.content.toLowerCase().startsWith('!forecast ')) {
+    data.content = msg.content.substring(10)
+    owm.getForecast(data, answer)
   }
 })
 
-client.login(config.token)
+function answer (content, channel) {
+  channel.send(content)
+}
 
+function send (content) {
+  var channelID = config.discord_channel
+  for (var channel of client.channels) {
+    if (channel[0] === channelID) {
+      answer(content, channel[1])
+      return
+    }
+  }
+}
+
+client.login(config.discord_token)
