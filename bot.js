@@ -4,6 +4,7 @@ const client = new Discord.Client()
 const twitter = require('./services/twitter.js')
 const youtube = require('./services/youtube.js')(config.youtube_apikey)
 const owm = require('./services/openweathermap.js')(config.owm_apikey)
+const translate = require('./services/translate.js')(config.gtranslate_apikey)
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`)
@@ -74,6 +75,11 @@ client.on('message', msg => {
   } else if (msg.content.toLowerCase().startsWith('!forecast ')) {
     data.content = msg.content.substring(10)
     owm.getForecast(data, answer)
+  } else if (msg.content.toLowerCase().startsWith('!translate ')) {
+    var toTranslate = msg.content.substring(11)
+    data.lang = toTranslate.split(' ')[0]
+    data.content = toTranslate.substring(data.lang.length + 1)
+    translate.translate(data, answer)
   }
 })
 

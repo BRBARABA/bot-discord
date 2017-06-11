@@ -14,5 +14,8 @@ module.exports = {
   twitter_tracked: 'MusgaFR',
 
   // OPENWEATHERMAP
-  owm_apikey: '28ab43c9ad4db9b92783421704a0e249'
+  owm_apikey: '28ab43c9ad4db9b92783421704a0e249',
+
+  // GTRANSLATE
+  gtranslate_apikey: 'AIzaSyDigkouz1Xs0GvSmTDERMrMsX5kiVxtRmY'
 }

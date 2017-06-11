@@ -9,18 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/pierrick.bignet/cloud-discord-bot.git"
+    "url": "git+ssh://git@github.com:BRBARABA/bot-discord.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://gitlab.com/pierrick.bignet/cloud-discord-bot/issues"
   },
-  "homepage": "https://gitlab.com/pierrick.bignet/cloud-discord-bot#README",
+  "homepage": "https://github.com/BRBARABA/bot-discord/blob/master/README.md",
   "dependencies": {
     "discord.js": "^11.1.0",
     "eslint-config-standard": "^10.2.1",
-    "node-rest-client-promise": "^2.0.0"
+    "google-translate": "^2.0.5",
+    "node-rest-client-promise": "^2.0.0",
+    "twitter": "^1.7.0"
   },
   "devDependencies": {
     "ava": "^0.19.1",
