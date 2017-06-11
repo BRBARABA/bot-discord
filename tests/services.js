@@ -1,6 +1,7 @@
 import test from 'ava'
 var client = require('node-rest-client-promise').Client()
 var config = require('../config.js')
+var googleTranslate = require('google-translate')(config.gtranslate_apikey)
 
 test('OpenWeatherMap_API', t => {
   return client.getPromise('http://api.openweathermap.org/data/2.5/weather?q=London&APPID=' + config.owm_apikey)
@@ -27,8 +28,7 @@ test('Youtube_API', t => {
 })
 
 test('Translate', t => {
-  var googleTranslate = require('google-translate')(config.gtranslate_apikey)
-  googleTranslate.translate('Coucou je suis un bot', 'en', function (err, translation) {
+  googleTranslate.translate('Coucou', 'en', function (err, translation) {
     if (err) {
       t.fail()
       throw err
