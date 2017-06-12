@@ -6,4 +6,7 @@ script:
   - ./node_modules/.bin/ava --verbose tests\
 deploy:
   provider: azure_web_apps
+  username: LoginTestIsep
+  password: Password
+  site: http://bot-discord.azurewebsites.net
   verbose: true
