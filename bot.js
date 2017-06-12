@@ -35,6 +35,8 @@ client.on('message', msg => {
       'hello': 'Feel alone ? Answers you another hello',
       // SPOTIFY
       '!spotify [search]': 'Grab something to hear for you',
+      '!spotifyArtists [artist to search]': 'Searching for an artist',
+      '!spotifyAlbums [album to search]': 'Searching for an album',
       // TRANSLATE
       '!translate [en, fr, ru...] [message]': 'Translate your message into the selected langage',
       // TWITTER
@@ -85,7 +87,13 @@ client.on('message', msg => {
     translate.translate(data, answer)
   } else if (msg.content.toLowerCase().startsWith('!spotify ')) {
     data.content = msg.content.substring(9)
-    spotify.searchTracks(data, answer)
+    spotify.search(data, answer)
+  } else if (msg.content.toLowerCase().startsWith('!spotifyartists ')) {
+    data.content = msg.content.substring(16)
+    spotify.searchArtists(data, answer)
+  } else if (msg.content.toLowerCase().startsWith('!spotifyalbums ')) {
+    data.content = msg.content.substring(15)
+    spotify.searchAlbums(data, answer)
   }
 })
 
