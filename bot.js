@@ -6,6 +6,7 @@ const youtube = require('./services/youtube.js')(config.youtube_apikey)
 const owm = require('./services/openweathermap.js')(config.owm_apikey)
 const translate = require('./services/translate.js')(config.gtranslate_apikey)
 const spotify = require('./services/spotify.js')
+const pokeapi = require('./services/pokeapi.js')
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`)
@@ -15,7 +16,7 @@ client.on('ready', () => {
 client.on('message', msg => {
   // Check if the message has been posted in a channel where the bot operates
   // and that the author is not the bot itself
-  if ((msg.channel.type !== 'dm' && config.discord_channel !== msg.channel.id) || msg.author.id === client.user.id) return
+  if ((msg.channel.type !== 'dm' && config.discord_channel !== msg.channel.id) || msg.author.bot || msg.author.id === client.user.id) return
 
   var data = {}
   data.author = msg.author
@@ -94,6 +95,10 @@ client.on('message', msg => {
   } else if (msg.content.toLowerCase().startsWith('!spotifyalbums ')) {
     data.content = msg.content.substring(15)
     spotify.searchAlbums(data, answer)
+  } else if (msg.content.toLowerCase().startsWith('!pokemon ')) {
+    data.content = msg.content.substring(9)
+    data.client = client
+    pokeapi.transform(data, answer)
   }
 })
 

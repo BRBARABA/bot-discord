@@ -1,7 +1,7 @@
 module.exports = {
   // DISCORD
-  discord_token: 'MzE2MjY0MTcyMDcxNDE5OTE1.DASveg.5IRc7izG5Tb_KIBLKZtJV6hBJLk',
-  discord_channel: '306030462613192714',
+  discord_token: 'MzE2MjE1MjMwNzM4OTg5MDU2.DA2mqw.w2Z56rpKfxd9qwrVlxYQY_-0pKw',
+  discord_channel: '323983049484140556',
 
   // YOUTUBE
   youtube_apikey: 'AIzaSyBkh2fe-WnWNZC2_833q5PyF64U51KLMa4',
